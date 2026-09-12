@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-stone-100">
+<head>
+  <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Genética de Ringnecks Pro - Nature Edition</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        forest: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        earth: {
+                            50: '#fdfbf7',
+                            100: '#f7f2e7',
+                            200: '#e8dcbe',
+                            600: '#a16207',
+                            800: '#713f12',
+                            900: '#451a03',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f7f6f2;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(161, 98, 7, 0.04) 0px, transparent 50%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(214, 211, 201, 0.8);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(245, 245, 240, 1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(22, 163, 74, 0.35);
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(22, 163, 74, 0.65);
+        }
+        .bird-card-preview {
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+        .bird-card-preview:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body class="h-full text-stone-800 antialiased custom-scrollbar">
+
+    <!-- MAIN CONTAINER -->
+    <div class="min-h-screen flex flex-col">
+        
+        <!-- HEADER WITH NATURE FOREST THEME -->
+        <header class="sticky top-0 z-40 bg-gradient-to-r from-forest-950 via-forest-900 to-stone-900 text-white border-b border-forest-800/60 px-4 py-3.5 sm:px-8 shadow-md">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-forest-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-forest-900/40 font-black text-xl border border-forest-400/30">
+                        <i class="fa-solid fa-feather-pointed"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-black text-lg sm:text-xl tracking-tight text-stone-100 flex items-center gap-2">
+                            Ringneck Genetics Pro
+                            <span class="text-[10px] bg-forest-800/90 text-forest-200 font-extrabold px-2.5 py-0.5 rounded-full border border-forest-600/50">
+                                <i class="fa-solid fa-leaf text-forest-400 mr-1"></i>Nature Edition 3.6
+                            </span>
+                        </h1>
+                        <p class="text-[11px] text-stone-300 font-medium">Calculadora de Mutações, Esmeralda, Buttercup & Genética Aviária</p>
+                    </div>
+                </div>
+
+                <!-- NAVIGATION TABS -->
+                <nav class="flex items-center gap-1.5 bg-forest-950/60 p-1.5 rounded-2xl border border-forest-800/80 w-full sm:w-auto overflow-x-auto backdrop-blur-md">
+                    <button id="nav-calculator" onclick="switchTab('calculator')" class="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-forest-600 text-white shadow-md shadow-forest-900/50 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>Calculadora</span>
+                    </button>
+                    <button id="nav-gallery" onclick="switchTab('gallery')" class="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-stone-300 hover:text-white hover:bg-forest-800/50 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-images"></i>
+                        <span>Mutações</span>
+                    </button>
+                    <button id="nav-quiz" onclick="switchTab('quiz')" class="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-stone-300 hover:text-white hover:bg-forest-800/50 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>Quiz</span>
+                    </button>
+                    <button id="nav-glossary" onclick="toggleGlossaryModal(true)" class="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-stone-300 hover:text-white hover:bg-forest-800/50 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                        <span>Glossário</span>
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+            <!-- TAB 1: CALCULATOR -->
+            <section id="tab-calculator" class="space-y-6">
+                <!-- PARENT SELECTION CARDS -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- MACHO (PAI) -->
+                    <div class="glass-panel rounded-3xl p-5 sm:p-6 border border-stone-200/90 shadow-sm space-y-5 relative overflow-hidden">
+                        <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+                            <div class="flex items-center gap-3">
+                                <span class="w-9 h-9 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-lg shadow-2xs border border-sky-200">
+                                    <i class="fa-solid fa-mars"></i>
+                                </span>
+                                <div>
+                                    <h2 class="font-black text-stone-900 text-base flex items-center gap-1.5">
+                                        Macho (Pai)
+                                    </h2>
+                                    <p class="text-[11px] text-stone-500 font-medium">Cromossomos ZZ (Pode ser portador/split em Sex-Linked)</p>
+                                </div>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full bg-sky-50 text-sky-800 font-black border border-sky-200">ZZ</span>
+                        </div>
+
+                        <!-- BASE COLOR & FACTORS -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-stone-700 mb-1">Cor Base (Psitacina)</label>
+                                <select id="male-base" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs text-stone-800 font-semibold focus:outline-none focus:ring-2 focus:ring-forest-500/30 focus:border-forest-600 shadow-2xs">
+                                    <option value="green">Verde (Selvagem Natural)</option>
+                                    <option value="blue">Azul (Linha Azul)</option>
+                                    <option value="turquoise">Turquesa (Parblue)</option>
+                                    <option value="esmeralda">Esmeralda (Emerald)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-stone-700 mb-1">Fator Escuro</label>
+                                <select id="male-dark" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs text-stone-800 font-semibold focus:outline-none focus:ring-2 focus:ring-forest-500/30 focus:border-forest-600 shadow-2xs">
+                                    <option value="0">Sem Fator Escuro (Verde / Azul)</option>
+                                    <option value="1">1 Fator Escuro (Verde Escuro / Cobalto)</option>
+                                    <option value="2">2 Fatores Escuros (Oliva / Malva)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- AUTOSOMAL MUTATIONS -->
+                        <div class="space-y-3">
+                            <h3 class="text-xs font-bold text-forest-800 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-dna text-forest-600"></i> Mutações Autossômicas Recessivas
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Gene Azul</label>
+                                    <select id="male-blue-gene" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal (Homozigoto)</option>
+                                        <option value="split">Portador (/Split Azul)</option>
+                                        <option value="visual">Visual (Azul / Turquesa)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Buttercup</label>
+                                    <select id="male-buttercup" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portador (/Split Buttercup)</option>
+                                        <option value="visual">Visual (Buttercup)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Cleartail (Butterhead)</label>
+                                    <select id="male-cleartail" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portador (/Split Cleartail)</option>
+                                        <option value="visual">Visual (Cleartail)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Esmeralda (Emerald)</label>
+                                    <select id="male-esmeralda" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portador (/Split Esmeralda)</option>
+                                        <option value="visual">Visual (Esmeralda)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Fallow</label>
+                                    <select id="male-fallow" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portador (/Split Fallow)</option>
+                                        <option value="visual">Visual (Fallow)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SEX-LINKED MUTATIONS -->
+                        <div class="space-y-3">
+                            <h3 class="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-venus-mars text-amber-600"></i> Mutações Ligadas ao Sexo (Sex-Linked)
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Ino (Lutino / Albino)</label>
+                                    <select id="male-ino" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portador (/Split Ino)</option>
+                                        <option value="visual">Visual (Ino)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Opalino (Opaline)</label>
+                                    <select id="male-opaline" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portador (/Split Opalino)</option>
+                                        <option value="visual">Visual (Opalino Visual)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Canela (Cinnamon)</label>
+                                    <select id="male-cinnamon" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portador (/Split Canela)</option>
+                                        <option value="visual">Visual (Canela Visual)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Pallid</label>
+                                    <select id="male-pallid" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portador (/Split Pallid)</option>
+                                        <option value="visual">Visual (Pallid Visual)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DOMINANT FACTORS -->
+                        <div class="space-y-3">
+                            <h3 class="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-crown text-amber-600"></i> Fatores Dominantes
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Fator Violeta</label>
+                                    <select id="male-violet" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="0">Sem Violeta</option>
+                                        <option value="1">1 Fator Violeta (SF)</option>
+                                        <option value="2">2 Fatores Violeta (DF)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Fator Cinza</label>
+                                    <select id="male-grey" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="0">Sem Cinza</option>
+                                        <option value="1">1 Fator Cinza (SF)</option>
+                                        <option value="2">2 Fatores Cinza (DF)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FÊMEA (MÃE) -->
+                    <div class="glass-panel rounded-3xl p-5 sm:p-6 border border-stone-200/90 shadow-sm space-y-5 relative overflow-hidden">
+                        <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+                            <div class="flex items-center gap-3">
+                                <span class="w-9 h-9 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-lg shadow-2xs border border-rose-200">
+                                    <i class="fa-solid fa-venus"></i>
+                                </span>
+                                <div>
+                                    <h2 class="font-black text-stone-900 text-base">Fêmea (Mãe)</h2>
+                                    <p class="text-[11px] text-stone-500 font-medium">Cromossomos ZW (Não pode ser split em Sex-Linked)</p>
+                                </div>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full bg-rose-50 text-rose-800 font-black border border-rose-200">ZW</span>
+                        </div>
+
+                        <!-- BASE COLOR & FACTORS -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-stone-700 mb-1">Cor Base (Psitacina)</label>
+                                <select id="female-base" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs text-stone-800 font-semibold focus:outline-none focus:ring-2 focus:ring-forest-500/30 focus:border-forest-600 shadow-2xs">
+                                    <option value="green">Verde (Selvagem Natural)</option>
+                                    <option value="blue">Azul (Linha Azul)</option>
+                                    <option value="turquoise">Turquesa (Parblue)</option>
+                                    <option value="esmeralda">Esmeralda (Emerald)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-stone-700 mb-1">Fator Escuro</label>
+                                <select id="female-dark" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs text-stone-800 font-semibold focus:outline-none focus:ring-2 focus:ring-forest-500/30 focus:border-forest-600 shadow-2xs">
+                                    <option value="0">Sem Fator Escuro (Verde / Azul)</option>
+                                    <option value="1">1 Fator Escuro (Verde Escuro / Cobalto)</option>
+                                    <option value="2">2 Fatores Escuros (Oliva / Malva)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- AUTOSOMAL MUTATIONS -->
+                        <div class="space-y-3">
+                            <h3 class="text-xs font-bold text-forest-800 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-dna text-forest-600"></i> Mutações Autossômicas Recessivas
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Gene Azul</label>
+                                    <select id="female-blue-gene" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal (Homozigoto)</option>
+                                        <option value="split">Portadora (/Split Azul)</option>
+                                        <option value="visual">Visual (Azul / Turquesa)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Buttercup</label>
+                                    <select id="female-buttercup" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portadora (/Split Buttercup)</option>
+                                        <option value="visual">Visual (Buttercup)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Cleartail (Butterhead)</label>
+                                    <select id="female-cleartail" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portadora (/Split Cleartail)</option>
+                                        <option value="visual">Visual (Cleartail)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Esmeralda (Emerald)</label>
+                                    <select id="female-esmeralda" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portadora (/Split Esmeralda)</option>
+                                        <option value="visual">Visual (Esmeralda)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Fallow</label>
+                                    <select id="female-fallow" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal</option>
+                                        <option value="split">Portadora (/Split Fallow)</option>
+                                        <option value="visual">Visual (Fallow)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SEX-LINKED MUTATIONS (FEMALES CANNOT BE SPLIT!) -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-venus-mars text-amber-600"></i> Mutações Ligadas ao Sexo
+                                </h3>
+                                <span class="text-[10px] bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded-full border border-amber-200">
+                                    Fêmeas nunca são splits
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Ino (Lutino / Albino)</label>
+                                    <select id="female-ino" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal (Não Ino)</option>
+                                        <option value="visual">Visual (Ino)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Opalino (Opaline)</label>
+                                    <select id="female-opaline" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal (Não Opalina)</option>
+                                        <option value="visual">Visual (Opalina Visual)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Canela (Cinnamon)</label>
+                                    <select id="female-cinnamon" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal (Não Canela)</option>
+                                        <option value="visual">Visual (Canela Visual)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Pallid</label>
+                                    <select id="female-pallid" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="normal">Normal (Não Pallid)</option>
+                                        <option value="visual">Visual (Pallid Visual)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DOMINANT FACTORS -->
+                        <div class="space-y-3">
+                            <h3 class="text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-crown text-amber-600"></i> Fatores Dominantes
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Fator Violeta</label>
+                                    <select id="female-violet" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="0">Sem Violeta</option>
+                                        <option value="1">1 Fator Violeta (SF)</option>
+                                        <option value="2">2 Fatores Violeta (DF)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-stone-600 mb-1 block font-medium">Fator Cinza</label>
+                                    <select id="female-grey" onchange="debouncedCalculate()" class="w-full bg-white border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 shadow-2xs">
+                                        <option value="0">Sem Cinza</option>
+                                        <option value="1">1 Fator Cinza (SF)</option>
+                                        <option value="2">2 Fatores Cinza (DF)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="glass-panel rounded-3xl p-6 border border-stone-200 shadow-md space-y-6">
+                    <div class="flex items-center justify-between border-b border-stone-200 pb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-2xl bg-forest-100 text-forest-800 flex items-center justify-center font-bold text-lg shadow-2xs border border-forest-200">
+                                <i class="fa-solid fa-chart-pie"></i>
+                            </span>
+                            <div>
+                                <h2 class="font-black text-stone-900 text-lg">Simulação Visual & Probabilidades</h2>
+                                <p class="text-xs text-stone-500">Renderização em vetor anatômico com alta precisão e velocidade</p>
+                            </div>
+                        </div>
+                        <button onclick="calculateGenetics()" class="px-4 py-2 bg-forest-700 hover:bg-forest-800 text-white font-extrabold text-xs rounded-xl shadow-md shadow-forest-900/20 transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            Atualizar
+                        </button>
+                    </div>
+
+                    <!-- SVG BIRD PREVIEW CARDS -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- MACHO PAI PREVIEW -->
+                        <div class="bird-card-preview bg-gradient-to-b from-stone-50 to-sky-50/50 rounded-3xl p-4 border border-sky-200/80 text-center space-y-3 shadow-2xs flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs font-black text-sky-800 bg-sky-100/90 px-3 py-1 rounded-full border border-sky-200 inline-flex items-center gap-1.5">
+                                    <i class="fa-solid fa-mars"></i> Macho Pai
+                                </span>
+                            </div>
+                            <div id="male-svg-container" class="w-48 h-48 mx-auto flex items-center justify-center p-1 drop-shadow-md"></div>
+                            <div class="bg-white/95 p-2.5 rounded-2xl border border-sky-100 shadow-2xs">
+                                <p id="male-summary-text" class="text-xs text-stone-800 font-extrabold leading-tight"></p>
+                            </div>
+                        </div>
+
+                        <!-- FÊMEA MÃE PREVIEW -->
+                        <div class="bird-card-preview bg-gradient-to-b from-stone-50 to-rose-50/50 rounded-3xl p-4 border border-rose-200/80 text-center space-y-3 shadow-2xs flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs font-black text-rose-800 bg-rose-100/90 px-3 py-1 rounded-full border border-rose-200 inline-flex items-center gap-1.5">
+                                    <i class="fa-solid fa-venus"></i> Fêmea Mãe
+                                </span>
+                            </div>
+                            <div id="female-svg-container" class="w-48 h-48 mx-auto flex items-center justify-center p-1 drop-shadow-md"></div>
+                            <div class="bg-white/95 p-2.5 rounded-2xl border border-rose-100 shadow-2xs">
+                                <p id="female-summary-text" class="text-xs text-stone-800 font-extrabold leading-tight"></p>
+                            </div>
+                        </div>
+
+                        <!-- FILHOTE EXEMPLO PREVIEW -->
+                        <div class="bird-card-preview bg-gradient-to-b from-forest-50/90 to-emerald-50/60 rounded-3xl p-4 border border-forest-200 text-center space-y-3 relative overflow-hidden shadow-2xs flex flex-col justify-between">
+                            <div class="absolute top-3 right-3 bg-forest-700 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-2xs uppercase tracking-wider">
+                                Previsão
+                            </div>
+                            <div>
+                                <span class="text-xs font-black text-forest-900 bg-forest-100 px-3 py-1 rounded-full border border-forest-200 inline-flex items-center gap-1.5">
+                                    <i class="fa-solid fa-egg"></i> Exemplo de Filhote Visual
+                                </span>
+                            </div>
+                            <div id="chick-svg-container" class="w-48 h-48 mx-auto flex items-center justify-center p-1 drop-shadow-md"></div>
+                            <div class="bg-white p-2.5 rounded-2xl border border-forest-200 shadow-2xs">
+                                <p id="chick-summary-text" class="text-xs text-forest-950 font-black leading-tight"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RESULTS LIST (MALES VS FEMALES) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                        <!-- MACHOS PROBABILITIES -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between border-b border-sky-200 pb-2">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-mars text-sky-600"></i>
+                                    <h3 class="font-black text-sm text-sky-950">Descendentes Machos (50% da Ninhada)</h3>
+                                </div>
+                                <span class="text-[10px] bg-sky-100 text-sky-800 font-black px-2 py-0.5 rounded-full border border-sky-200">ZZ</span>
+                            </div>
+                            <div id="male-results-list" class="space-y-2 max-h-96 overflow-y-auto pr-1 custom-scrollbar"></div>
+                        </div>
+
+                        <!-- FÊMEAS PROBABILITIES -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between border-b border-rose-200 pb-2">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-venus text-rose-600"></i>
+                                    <h3 class="font-black text-sm text-rose-950">Descendentes Fêmeas (50% da Ninhada)</h3>
+                                </div>
+                                <span class="text-[10px] bg-rose-100 text-rose-800 font-black px-2 py-0.5 rounded-full border border-rose-200">ZW</span>
+                            </div>
+                            <div id="female-results-list" class="space-y-2 max-h-96 overflow-y-auto pr-1 custom-scrollbar"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: MUTATION GALLERY -->
+            <section id="tab-gallery" class="hidden space-y-6">
+                <div class="text-center max-w-xl mx-auto space-y-2">
+                    <span class="text-xs font-black text-forest-800 bg-forest-100 px-3 py-1 rounded-full border border-forest-200">
+                        <i class="fa-solid fa-leaf mr-1"></i>Catálogo Genético
+                    </span>
+                    <h2 class="text-2xl font-black text-stone-900">Galeria Ilustrada de Mutações de Ringneck</h2>
+                    <p class="text-xs text-stone-600 font-medium">Guia ilustrado e explicativo com Esmeralda, Buttercup, Opalino, Cleartail e Mutações Recessivas.</p>
+                </div>
+
+                <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards populated via JS -->
+                </div>
+            </section>
+
+            <!-- TAB 3: QUIZ WITH DIVERSIFIED & SHUFFLED ANSWERS -->
+            <section id="tab-quiz" class="hidden space-y-6">
+                <!-- QUIZ START SCREEN WITH DIFFICULTY SELECTOR -->
+                <div id="quiz-start-screen" class="glass-panel rounded-3xl p-8 sm:p-12 text-center space-y-6 max-w-2xl mx-auto border border-stone-200 shadow-md">
+                    <div class="w-20 h-20 bg-gradient-to-tr from-forest-800 via-forest-600 to-emerald-400 text-white rounded-3xl flex items-center justify-center text-3xl mx-auto shadow-lg shadow-forest-900/30 font-black border border-forest-400/30">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-stone-900">Quiz Genético Ringneck Pro</h2>
+                        <p class="text-xs sm:text-sm text-stone-600 max-w-md mx-auto mt-2 leading-relaxed font-medium">
+                            Teste seus conhecimentos! A cada novo teste, perguntas dinâmicas e alternativas sorteadas serão geradas a partir do nosso banco genético.
+                        </p>
+                    </div>
+
+                    <!-- SELETOR DE DIFICULDADE -->
+                    <div class="space-y-3 pt-2">
+                        <p class="text-xs font-bold text-stone-700 uppercase tracking-wider">Escolha o modo de jogo:</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <button onclick="setQuizDifficultyAndStart('easy')" class="px-5 py-3 bg-forest-50 hover:bg-forest-100 text-forest-900 font-bold text-xs rounded-2xl border border-forest-200 transition-all flex items-center gap-2 shadow-2xs">
+                                <i class="fa-solid fa-seedling text-forest-600"></i>
+                                Nível Fácil (6 questões sorteadas)
+                            </button>
+                            <button onclick="setQuizDifficultyAndStart('medium')" class="px-5 py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-2xl border border-amber-200 transition-all flex items-center gap-2 shadow-2xs">
+                                <i class="fa-solid fa-bolt text-amber-600"></i>
+                                Nível Médio (6 questões sorteadas)
+                            </button>
+                            <button onclick="setQuizDifficultyAndStart('hard')" class="px-5 py-3 bg-rose-50 hover:bg-rose-100 text-rose-900 font-bold text-xs rounded-2xl border border-rose-200 transition-all flex items-center gap-2 shadow-2xs">
+                                <i class="fa-solid fa-fire text-rose-600"></i>
+                                Nível Difícil (6 questões sorteadas)
+                            </button>
+                            <button onclick="setQuizDifficultyAndStart('all')" class="px-5 py-3 bg-forest-700 hover:bg-forest-800 text-white font-extrabold text-xs rounded-2xl shadow-md shadow-forest-900/20 transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-layer-group"></i>
+                                Mix Completo (10 questões aleatórias)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUESTION SCREEN -->
+                <div id="quiz-question-screen" class="hidden glass-panel rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto border border-stone-200 shadow-md space-y-6">
+                    <div class="flex items-center justify-between border-b border-stone-200 pb-4">
+                        <span id="quiz-progress-indicator" class="text-xs font-bold text-forest-900 bg-forest-100 px-3 py-1 rounded-full border border-forest-200">
+                            Questão 1
+                        </span>
+                        <span id="quiz-score-indicator" class="text-xs font-black text-amber-900 bg-amber-50 px-3 py-1 rounded-full border border-amber-200 flex items-center gap-1">
+                            <i class="fa-solid fa-star text-amber-500"></i> Pontos: 0
+                        </span>
+                    </div>
+
+                    <h3 id="quiz-question-text" class="text-base sm:text-lg font-bold text-stone-900 leading-snug">
+                        Pergunta aqui...
+                    </h3>
+
+                    <div id="quiz-answers-container" class="space-y-3">
+                        <!-- Options generated dynamically -->
+                    </div>
+
+                    <div id="quiz-feedback-box" class="hidden p-4 rounded-2xl text-xs space-y-1 shadow-2xs">
+                        <!-- Feedback content -->
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden px-6 py-2.5 bg-forest-700 hover:bg-forest-800 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-2">
+                            <span>Próxima Questão</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FINISHED SCREEN -->
+                <div id="quiz-finished-screen" class="hidden glass-panel rounded-3xl p-8 sm:p-12 text-center space-y-6 max-w-xl mx-auto border border-stone-200 shadow-md">
+                    <div class="w-20 h-20 bg-gradient-to-tr from-amber-400 to-amber-600 text-white rounded-full flex items-center justify-center text-3xl mx-auto shadow-md shadow-amber-500/20 font-black">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-black text-stone-900">Parabéns! Quiz Concluído!</h2>
+                        <p id="quiz-final-score-text" class="text-sm text-stone-600 mt-2 font-medium">
+                            Você concluiu o teste com sucesso!
+                        </p>
+                    </div>
+                    <button onclick="restartQuiz()" class="px-6 py-3 bg-forest-700 hover:bg-forest-800 text-white font-extrabold text-xs rounded-2xl shadow-md transition-all flex items-center gap-2 mx-auto">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Novo Quiz (Perguntas Diferenciadas)
+                    </button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MODAL GLOSSÁRIO GENÉTICO -->
+    <div id="glossary-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-xs">
+        <div class="glass-panel border border-stone-200 rounded-3xl p-6 sm:p-8 max-w-2xl w-full space-y-6 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-2xl bg-forest-100 text-forest-800 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-book-open"></i>
+                    </span>
+                    <h3 class="font-black text-lg text-stone-900">Glossário Genético Aviário</h3>
+                </div>
+                <button onclick="toggleGlossaryModal(false)" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-900 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs text-stone-700 leading-relaxed">
+                <div class="p-4 bg-stone-50/80 rounded-2xl border border-stone-200">
+                    <h4 class="font-bold text-forest-800 text-sm mb-1 flex items-center gap-1.5"><i class="fa-solid fa-gem text-emerald-600"></i> Mutação Esmeralda (Emerald)</h4>
+                    <p>Cria um tom verde-esmeralda cintilante e rico no corpo com suave matiz pastel no peito, alterando o padrão clássico de refração da luz nas penas.</p>
+                </div>
+
+                <div class="p-4 bg-stone-50/80 rounded-2xl border border-stone-200">
+                    <h4 class="font-bold text-amber-800 text-sm mb-1 flex items-center gap-1.5"><i class="fa-solid fa-sun text-amber-500"></i> Mutação Buttercup</h4>
+                    <p>Destaca-se pela plumagem amarela manteiga pastel na cabeça e peito com asas e manto suavemente clareados. É altamente valorizada na linha Azul e Parblue.</p>
+                </div>
+
+                <div class="p-4 bg-stone-50/80 rounded-2xl border border-stone-200">
+                    <h4 class="font-bold text-rose-800 text-sm mb-1 flex items-center gap-1.5"><i class="fa-solid fa-feather text-rose-500"></i> Efeito Opalino (Opaline)</h4>
+                    <p>Mutações Opalino reduzem a melanina escura no dorso e asas, invertendo o padrão clássico e cobrindo a nuca e as costas com a mesma cor vibrante da cabeça e corpo.</p>
+                </div>
+
+                <div class="p-4 bg-stone-50/80 rounded-2xl border border-stone-200">
+                    <h4 class="font-bold text-sky-800 text-sm mb-1 flex items-center gap-1.5"><i class="fa-solid fa-dna text-sky-600"></i> Sistema Cromossômico ZW (Aves)</h4>
+                    <p>Nas aves, o sexo heterogamético é a <strong>fêmea (ZW)</strong>, enquanto o <strong>macho é homogamético (ZZ)</strong>. As fêmeas possuem apenas uma cópia do cromossomo Z e jamais podem ser portadoras (/split) de mutações sex-linked.</p>
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <button onclick="toggleGlossaryModal(false)" class="w-full py-2.5 bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold text-xs rounded-xl transition-all">
+                    Fechar Glossário
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MUTATION DICTIONARY & DATA
+        const MUTATION_DATA = {
+            'esmeralda': {
+                id: 'esmeralda',
+                name: 'Esmeralda (Emerald)',
+                category: 'autosomal',
+                categoryName: 'Autossômica Recessiva',
+                bgGradient: 'from-emerald-600 to-teal-500',
+                description: 'Cria uma tonalidade verde-esmeralda rica com reflexo metálico único nas asas, nuca e manto.',
+                visualTip: 'Verde esmeralda brilhante no corpo com leve atenuação pastel.'
+            },
+            'buttercup': {
+                id: 'buttercup',
+                name: 'Buttercup',
+                category: 'autosomal',
+                categoryName: 'Autossômica Recessiva',
+                bgGradient: 'from-amber-300 to-yellow-200',
+                description: 'Confere tom amarelo manteiga pastel na cabeça e peito, clareando harmoniosamente asas e cauda.',
+                visualTip: 'Cabeça amarela Buttercup com gradiente pastel nas asas.'
+            },
+            'opaline': {
+                id: 'opaline',
+                name: 'Opalino (Opaline)',
+                category: 'sex-linked',
+                categoryName: 'Ligada ao Sexo (Sex-Linked)',
+                bgGradient: 'from-rose-500 to-pink-400',
+                description: 'Causa o efeito "manto invertido", removendo a melanina escura do dorso e asas para exibir a cor luminosa do peito.',
+                visualTip: 'Costas e nuca com a mesma cor da cabeça; bordas das asas luminosas.'
+            },
+            'cleartail': {
+                id: 'cleartail',
+                name: 'Cleartail (Cauda Clara / Butterhead)',
+                category: 'autosomal',
+                categoryName: 'Autossômica Recessiva',
+                bgGradient: 'from-amber-400 to-yellow-300',
+                description: 'Inibe a melanina na cabeça e cauda. Em aves azuis origina o famoso contraste Butterhead com cabeça amarela/creme e cauda clara.',
+                visualTip: 'Cabeça amarela ou creme pastel com cauda clara em contraste com o corpo.'
+            },
+            'cinnamon': {
+                id: 'cinnamon',
+                name: 'Canela (Cinnamon)',
+                category: 'sex-linked',
+                categoryName: 'Ligada ao Sexo (Sex-Linked)',
+                bgGradient: 'from-amber-800 to-yellow-700',
+                description: 'Converte a melanina preta em pigmento marrom-canela aquecido nas asas e rêmiges.',
+                visualTip: 'Rêmiges em tom marrom-canela suave com corpo levemente aquecido.'
+            },
+            'ino': {
+                id: 'ino',
+                name: 'Ino (Lutino / Albino)',
+                category: 'sex-linked',
+                categoryName: 'Ligada ao Sexo (Sex-Linked)',
+                bgGradient: 'from-yellow-400 to-amber-300',
+                description: 'Remoção total da melanina. Em linha verde origina o Lutino (amarelo), em linha azul o Albino (branco).',
+                visualTip: 'Plumagem 100% amarela/branca com olhos vermelhos e bico rosado.'
+            },
+            'fallow': {
+                id: 'fallow',
+                name: 'Fallow',
+                category: 'autosomal',
+                categoryName: 'Autossômica Recessiva',
+                bgGradient: 'from-amber-700 to-orange-500',
+                description: 'Suaviza a melanina para tons castanhos claros e confere olhos rubi translúcidos.',
+                visualTip: 'Olhos vermelhos e penas com lavagem marrom-dourada.'
+            },
+            'blue': {
+                id: 'blue',
+                name: 'Azul (Blue)',
+                category: 'autosomal',
+                categoryName: 'Autossômica Recessiva',
+                bgGradient: 'from-sky-500 to-blue-400',
+                description: 'Suprime totalmente a psitacina amarela, tornando a ave azul com máscara branca.',
+                visualTip: 'Corpo azul vibrante com máscara facial totalmente branca ou creme.'
+            }
+        };
+
+        // EXTENDED MASTER POOL OF DIVERSIFIED QUIZ QUESTIONS (30+ QUESTIONS)
+        const MASTER_QUIZ_POOL = [
+            // EASY / FÁCIL (10 questões)
+            {
+                difficulty: "easy",
+                question: "Qual o efeito visual principal da mutação Esmeralda (Emerald) no Ringneck?",
+                options: [
+                    "Suprime 100% da eumelanina negra, tornando todas as penas amarelas brilhantes.",
+                    "Altera apenas a cor do bico e das patas para vermelho-rubi intenso.",
+                    "Modifica a refração de luz, conferindo um tom verde-esmeralda cintilante e rico na plumagem com peito ligeiramente pastel.",
+                    "Remove a psitacina amarela, transformando a ave em azul escuro cobalto."
+                ],
+                correct: 2,
+                explanation: "A mutação Esmeralda altera a estrutura de refração da luz nas penas, conferindo a tonalidade verde-esmeralda radiante e metálica característica."
+            },
+            {
+                difficulty: "easy",
+                question: "Como se caracteriza visualmente a mutação Buttercup em um Ringneck?",
+                options: [
+                    "Corpo totalmente branco com olhos vermelhos translúcidos.",
+                    "Cabeça e peito em tom amarelo-manteiga pastel suave, com asas e manto clareados.",
+                    "Máscara facial cinza-chumbo com nuca e dorso vermelho-canela.",
+                    "Redução de 50% no tamanho das penas das asas e cauda."
+                ],
+                correct: 1,
+                explanation: "A mutação Buttercup destaca-se pela tonalidade amarelada suave tipo manteiga na região cefálica e peitoral com atenuação da melanina nas asas."
+            },
+            {
+                difficulty: "easy",
+                question: "Qual o resultado fenotípico da combinação entre a mutação Ino e o gene Azul (homozigoto)?",
+                options: [
+                    "Lutino com reflexos azulados nas pontas das asas.",
+                    "Cremino com bico preto e olhos escuros.",
+                    "Verde-pastel com cauda azul vibrante.",
+                    "Albino (plumagem 100% branca com olhos vermelhos e bico rosado/avermelhado)."
+                ],
+                correct: 3,
+                explanation: "O gene Ino elimina a melanina (escura) e o gene Azul elimina a psitacina (amarela). A ausência total de ambos resulta no Albino."
+            },
+            {
+                difficulty: "easy",
+                question: "Por que uma fêmea Ringneck NUNCA pode ser portadora (/split) de mutações ligadas ao sexo como Opalino, Canela ou Ino?",
+                options: [
+                    "Porque fêmeas possuem o sistema ZW (apenas 1 cromossomo Z). Se tiverem o gene mutado no Z, expressam a mutação visualmente.",
+                    "Porque os genes ligados ao sexo são inativados pelo cromossomo W nas fêmeas adultas.",
+                    "Porque o cromossomo W é dominante e mascara qualquer gene recessivo vindo do pai.",
+                    "Porque fêmeas só transmitem genes autossômicos através das mitocôndrias."
+                ],
+                correct: 0,
+                explanation: "Nas aves, o sexo feminino é heterogamético (ZW). Com apenas uma cópia do cromossomo Z, a fêmea expressa visualmente a mutação sex-linked ou é normal, nunca portadora."
+            },
+            {
+                difficulty: "easy",
+                question: "O que ocorre quando acasalamos dois exemplares com 1 Fator Escuro (ex: Verde Escuro x Verde Escuro)?",
+                options: [
+                    "50% Verde Escuro e 50% Oliva.",
+                    "100% dos filhotes nascem Verde Escuro devido à dominância completa.",
+                    "25% sem fator (Verde), 50% com 1 fator (Verde Escuro) e 25% com 2 fatores (Oliva).",
+                    "75% Verde Escuro e 25% Verde Selvagem sem fator."
+                ],
+                correct: 2,
+                explanation: "O Fator Escuro possui herança de codominância/dominância incompleta. O cruzamento 1DF x 1DF resulta na proporção mendeliana 1:2:1 (0DF, 1DF e 2DF)."
+            },
+            {
+                difficulty: "easy",
+                question: "Qual a característica marcante da mutação Autossômica Recessiva Cleartail na linha Azul?",
+                options: [
+                    "Corpo totalmente cinza com cauda preta retinta.",
+                    "Corpo azul com a cabeça creme/amarelada (Butterhead) e cauda clara.",
+                    "Cabeça azul-escura e corpo amarelo-ouro sem marcações.",
+                    "Asas verdes com remiges marrom-canela e cauda azul."
+                ],
+                correct: 1,
+                explanation: "Na linha azul, o Cleartail inibe a melanina na cabeça e cauda, criando o famoso contraste 'Butterhead' (cabeça creme/amarela e cauda clara)."
+            },
+            {
+                difficulty: "easy",
+                question: "Em relação ao sistema de determinação sexual das aves, qual das afirmações está correta?",
+                options: [
+                    "Os machos são heterogaméticos (XY) e as fêmeas homogaméticas (XX).",
+                    "Os machos são homogaméticos (ZZ) e as fêmeas heterogaméticas (ZW).",
+                    "Tanto machos quanto fêmeas possuem pares idênticos XX.",
+                    "O sexo é determinado unicamente pela temperatura de incubação do ovo."
+                ],
+                correct: 1,
+                explanation: "Nas aves (sistema ZW), os machos possuem dois cromossomos Z (ZZ) enquanto as fêmeas possuem um Z e um W (ZW)."
+            },
+            {
+                difficulty: "easy",
+                question: "Qual a cor dos olhos característica em exemplares com a mutação Fallow?",
+                options: [
+                    "Pretos intensos com anel ocular branco brilhante.",
+                    "Azul turquesa translúcido.",
+                    "Rubi / Vermelho translúcido.",
+                    "Verde-esmeralda cintilante."
+                ],
+                correct: 2,
+                explanation: "A mutação Fallow reduz a pigmentação de melanina nos olhos, resultando em íris/pupila de tom vermelho-rubi."
+            },
+            {
+                difficulty: "easy",
+                question: "A mutação Fator Cinza no Ringneck tem que tipo de herança genotípica?",
+                options: [
+                    "Autossômica Recessiva pura.",
+                    "Ligada ao Sexo Recessiva.",
+                    "Dominante (Autossômica).",
+                    "Mitocôndrial materna."
+                ],
+                correct: 2,
+                explanation: "O Fator Cinza é uma mutação dominante autossômica; basta ter 1 fator (SF) para alterar visualmente a ave."
+            },
+            {
+                difficulty: "easy",
+                question: "O termo 'split' na avicultura e genética de Ringnecks refere-se a:",
+                options: [
+                    "Uma ave que possui coloração dividida ao meio no corpo.",
+                    "Um exemplar heterozigoto que porta o gene de uma mutação recessiva sem expressá-la visualmente.",
+                    "Uma mutação letal que impede o crescimento das remiges das asas.",
+                    "Uma técnica de acasalamento entre espécies diferentes de psitacídeos."
+                ],
+                correct: 1,
+                explanation: "'Split' ou 'portador' é a ave heterozigota que carrega o gene recessivo no seu DNA, mas possui o fenótipo normal."
+            },
+
+            // MEDIUM / MÉDIO (10 questões)
+            {
+                difficulty: "medium",
+                question: "No cruzamento de Macho Verde /split Azul /split Ino x Fêmea Azul Normal, qual a probabilidade de nascer um MACHO ALBINO?",
+                options: [
+                    "0% (machos precisam herdar Ino do pai e da mãe para serem visuais, e a mãe é Normal ZW).",
+                    "25% (pois 50% herdam Azul e 50% herdam Ino).",
+                    "12.5% (probabilidade geral de filhotes albinos dividida por 2).",
+                    "50% (pois o pai é portador de ambas as mutações)."
+                ],
+                correct: 0,
+                explanation: "Para um MACHO ser Ino visual, ele precisa de dois cromossomos Z contendo Ino. Como a mãe é ZW Normal, ela só passa Z Normal aos filhos machos, impedindo machos Ino visuais."
+            },
+            {
+                difficulty: "medium",
+                question: "A mutação Esmeralda é autossômica recessiva. Ao cruzar Macho Esmeralda Visual x Fêmea Verde Normal (não portadora), qual o fenótipo da ninhada?",
+                options: [
+                    "50% dos machos serão Esmeralda visuais e 50% das fêmeas serão Verdes Normais.",
+                    "25% Esmeralda visuais, 50% portadores e 25% Verdes Normais.",
+                    "100% dos filhotes serão Esmeraldas de tonalidade pastel suave.",
+                    "100% dos filhotes (machos e fêmeas) serão Verdes visuais, porém todos portadores (/split) de Esmeralda."
+                ],
+                correct: 3,
+                explanation: "Por ser autossômica recessiva, um pai homozigoto (Visual) transmitirá obrigatoriamente 1 alelo mutado a todos os filhotes, tornando 100% da ninhada portadora (/split)."
+            },
+            {
+                difficulty: "medium",
+                question: "Ao cruzar Macho Azul (0 Fator Escuro) x Fêmea Malva (Azul com 2 Fatores Escuros), qual a distribuição dos filhotes quanto ao Fator Escuro?",
+                options: [
+                    "50% Azul Sky (0 Fator) e 50% Malva (2 Fatores).",
+                    "100% dos filhotes serão Cobalto (Azul com 1 Fator Escuro).",
+                    "25% Sky, 50% Cobalto e 25% Malva.",
+                    "75% Cobalto e 25% Malva."
+                ],
+                correct: 1,
+                explanation: "O pai doa 0 fatores escuros e a mãe doa obrigatoriamente 1 fator escuro a cada filhote. Assim, 100% da ninhada terá exatamente 1 Fator Escuro (Cobalto)."
+            },
+            {
+                difficulty: "medium",
+                question: "Como difere a mutação Buttercup de um Lutino visual?",
+                options: [
+                    "O Buttercup é uma mutação sex-linked que elimina a psitacina amarela da cabeça.",
+                    "O Lutino mantém marcações pretas nas asas enquanto o Buttercup é totalmente amarelo sem bico vermelho.",
+                    "O Buttercup mantém olhos escuros e atenua a melanina mantendo tom pastel no corpo, enquanto o Lutino elimina 100% da melanina e tem olhos vermelhos.",
+                    "Não há diferença genotípica ou fenotípica; Buttercup é apenas outro nome comercial para o Lutino."
+                ],
+                correct: 2,
+                explanation: "Buttercup é autossômico recessivo e preserva os olhos escuros e certa carga de pigmento pastel no corpo, enquanto o Ino (Lutino) apaga totalmente a melanina."
+            },
+            {
+                difficulty: "medium",
+                question: "Para obter obrigatoriamente 100% de FILHOTES FÊMEAS OPALINAS VISUAIS no ninho, qual casal deve ser formado?",
+                options: [
+                    "Macho Opalino Visual (Z^op Z^op) com qualquer fêmea.",
+                    "Macho Verde Normal (Z Z) com Fêmea Opalina Visual (Z^op W).",
+                    "Macho Verde Normal /split Azul com Fêmea Opalina Visual.",
+                    "Macho Heterozigoto /split Opalino com Fêmea Normal."
+                ],
+                correct: 0,
+                explanation: "Um macho Opalino Visual doará sempre um cromossomo Z com a mutação Opalino. Como todas as filhotes fêmeas recebem o Z do pai e o W da mãe, 100% das fêmeas nascerão Opalinas."
+            },
+            {
+                difficulty: "medium",
+                question: "Como se dá a interação entre a mutação Turquesa (Parblue) e o gene Azul clássico?",
+                options: [
+                    "Turquesa é dominante sobre o Azul, eliminando completamente a tonalidade verde do corpo.",
+                    "Turquesa é uma mutação ligada ao sexo que só se manifesta na presença do Fator Cinza.",
+                    "O gene Turquesa anula o efeito do Fator Escuro, transformando cobalto em azul-sky.",
+                    "São mutações alelóficas no mesmo locus psitacina; um exemplar Turquesa/Azul expressa retenção parcial de amarelo na cabeça e peito."
+                ],
+                correct: 3,
+                explanation: "Turquesa e Azul são alelos do mesmo gene (locus psitacina). Um indivíduo heterozigoto Turquesa/Azul manifesta a forma Parblue com amarelo parcial reduzido."
+            },
+            {
+                difficulty: "medium",
+                question: "Se acasalarmos Macho Verde /split Buttercup x Fêmea Buttercup Visual, qual o percentual esperado de filhotes VISUALMENTE BUTTERCUP?",
+                options: [
+                    "100% de machos e fêmeas Buttercup.",
+                    "50% dos filhotes (tanto machos quanto fêmeas).",
+                    "Apenas 25% de machos Buttercup e 0% fêmeas.",
+                    "75% dos filhotes visuais."
+                ],
+                correct: 1,
+                explanation: "Trata-se de um teste de recruzamento (Aa x aa). A descendência gerará 50% heterozigotos (Aa - /split Buttercup) e 50% homozigotos recessivos (aa - Buttercup Visual)."
+            },
+            {
+                difficulty: "medium",
+                question: "Qual o fenotipo visual resultante da mutação Canela (Cinnamon) sobre a eumelanina das asas?",
+                options: [
+                    "Transforma as marcações escuras das remiges em tom marrom-canela aquecido.",
+                    "Elimina toda a cor marrom e transforma as asas em branco puro.",
+                    "Torna as pontas das asas azuis-cobalto com reflexos violetas.",
+                    "Aumenta a pigmentação preta tornando as asas totalmente negras."
+                ],
+                correct: 0,
+                explanation: "A mutação Canela oxida incompletamente a melanina, convertendo a eumelanina preta em pigmentação marrom-canela suave."
+            },
+            {
+                difficulty: "medium",
+                question: "Um macho Verde /split Canela acasalado com Fêmea Verde Normal pode gerar filhotes machos visuais Canela?",
+                options: [
+                    "Sim, 50% dos machos serão Canela visuais.",
+                    "Não, pois machos precisam de 2 alelos Canela (um do pai e outro da mãe), e a mãe é Normal.",
+                    "Sim, 100% dos machos serão Canela visuais.",
+                    "Sim, mas apenas se a fêmea for /split Azul."
+                ],
+                correct: 1,
+                explanation: "A mutação Canela é sex-linked. Para um macho ser visual (Z^cin Z^cin), deve herdar Z^cin de ambos os pais. A mãe Z W Normal doará apenas Z normal aos machos."
+            },
+            {
+                difficulty: "medium",
+                question: "A mutação Opalino (Opaline) altera o padrão das penas do manto (dorso). Qual a alteração marcante?",
+                options: [
+                    "Faz com que o manto fique preto intenso sem brilho.",
+                    "Remove a melanina escura do manto, fazendo a nuca/costas exibirem a mesma cor do peito/cabeça.",
+                    "Cria faixas horizontais amarelas e pretas estilo abelha.",
+                    "Transforma as penas das costas em penugem branca fina."
+                ],
+                correct: 1,
+                explanation: "A mutação Opalino provoca a inversão de manto, clareando o pigmento escuro das costas e cobrindo a nuca com o tom vibrante do peito e cabeça."
+            },
+
+            // HARD / DIFÍCIL (10 questões)
+            {
+                difficulty: "hard",
+                question: "No acasalamento Macho Canela /split Azul (Z^cin Z, bl/bl) x Fêmea Azul Visual (Z W, bl/bl), qual a proporção de MACHOS CANELA AZUL VISUAIS?",
+                options: [
+                    "25% (metade dos machos azuis herdam o gene Canela).",
+                    "0% (os machos recebem o Z Normal da mãe Z W, tornando-se no máximo portadores /Canela).",
+                    "50% (todos os machos que herdarem Z^cin do pai serão visuais).",
+                    "12.5% (probabilidade ponderada entre todos os ovos do ninho)."
+                ],
+                correct: 1,
+                explanation: "Para um filho macho expressar a mutação ligada ao sexo Canela, precisaria do gene vindo do pai E da mãe. Como a mãe é Z W (Normal para Canela), ela doa um Z sem Canela aos filhos machos."
+            },
+            {
+                difficulty: "hard",
+                question: "O Fator Violeta é dominante. Ao cruzar Violeta SF (Single Factor) na Linha Azul x Azul sem Violeta, qual o percentual de filhotes VISIVELMENTE VIOLETAS?",
+                options: [
+                    "100% dos filhotes serão Violeta devido à dominância estrita sobre a linha azul.",
+                    "25% Violeta DF, 50% Violeta SF e 25% Azul Sky.",
+                    "50% dos filhotes serão Violeta SF (expressando violeta radiante no corpo azul).",
+                    "Apenas 50% das fêmeas serão violetas por ser um fator hormônio-dependente."
+                ],
+                correct: 2,
+                explanation: "Por ser uma mutação dominante simples em dose heterozigota (SF), a transmissão do alelo Violeta a 50% dos gametas resulta em 50% de filhotes Violeta SF visuais."
+            },
+            {
+                difficulty: "hard",
+                question: "Acasalando Macho Opalino-Canela (Z^op,cin Z^op,cin) x Fêmea Verde Normal (sem crossing-over), quais os fenótipos da descendência?",
+                options: [
+                    "100% Machos Verdes /split Opalino e Canela; 100% Fêmeas Opalina-Canela Visuais.",
+                    "100% Machos Opalino-Canela Visuais; 100% Fêmeas Verdes Normais.",
+                    "50% Machos Canela e 50% Fêmeas Opalinas puras.",
+                    "100% dos filhotes Verdes sem qualquer porte genético."
+                ],
+                correct: 0,
+                explanation: "O pai doa Z^op,cin a todos os filhotes. As fêmeas recebem o W da mãe e ficam visuais para ambas (Opalina-Canela). Os machos recebem Z normal da mãe e ficam Verdes portadores de ambos (/Opalino /Canela)."
+            },
+            {
+                difficulty: "hard",
+                question: "Ao cruzar dois exemplares Verde /split Azul /split Cleartail, qual a chance de nascer um filhote CLEARTAIL AZUL VISUAL?",
+                options: [
+                    "1/4 (25%), pois 50% herdam azul e 50% herdam cleartail.",
+                    "1/8 (12.5%), considerando o filtro por sexo do filhote.",
+                    "3/16 (18.75%), somando as frações mendelianas dominantes.",
+                    "1/16 (6.25%), pois resulta do produto de duas mutações autossômicas recessivas independentes (1/4 Azul x 1/4 Cleartail)."
+                ],
+                correct: 3,
+                explanation: "Ambas as mutações são autossômicas recessivas independentes. A probabilidade de ser Azul visual é 1/4 e de ser Cleartail visual é 1/4. Multiplicando as probabilidades: 1/4 * 1/4 = 1/16 (6.25%)."
+            },
+            {
+                difficulty: "hard",
+                question: "Qual a razão genotípica entre os filhotes FENOTIPICAMENTE NORMAIS (visualmente verdes) quanto à mutação autossômica Esmeralda, quando ambos os pais são portadores (Verde /split Esmeralda)?",
+                options: [
+                    "50% Homozigoto Normal e 50% Heterozigoto.",
+                    "1/3 Homozigoto Normal (não portador) e 2/3 Heterozigoto (portador /split Esmeralda).",
+                    "100% dos filhotes verdes visuais serão portadores da mutação.",
+                    "1/4 Homozigoto Normal, 1/2 Heterozigoto e 1/4 Esmeralda."
+                ],
+                correct: 1,
+                explanation: "O cruzamento Aa x Aa gera 1 AA : 2 Aa : 1 aa. Excluindo os visuais (aa = 1/4), restam 3 partes fenotipicamente normais. Destas 3 partes, 1 é AA (1/3) e 2 são Aa (2/3 portadores)."
+            },
+            {
+                difficulty: "hard",
+                question: "Ao acasalar Macho Pallid (Sex-linked) x Fêmea Ino (Sex-linked), qual o fenótipo esperado nos machos e fêmeas?",
+                options: [
+                    "Fêmeas serão Ino Visuais; Machos serão Verdes Normais sem porte.",
+                    "100% dos filhotes serão Albinos visuais em ambos os sexos.",
+                    "Fêmeas serão Pallid Visuais; Machos serão PallidIno (alelomorfismo com expressão intermediária).",
+                    "Fêmeas serão Verdes Normais; Machos serão Ino Visuais."
+                ],
+                correct: 2,
+                explanation: "Pallid e Ino são alelos no mesmo locus Z. As fêmeas herdam Z^pallid do pai e W da mãe, tornando-se Pallid Visuais. Os machos herdam Z^pallid do pai e Z^ino da mãe, forming a combinação alelomórfica PallidIno."
+            },
+            {
+                difficulty: "hard",
+                question: "No cruzamento Macho Cobalto Violeta SF (1DF, 1 Violeta SF) x Fêmea Sky Blue (0DF, 0 Violeta), qual a proporção esperada de filhotes VIOLETA COBALTO SF?",
+                options: [
+                    "100% dos filhotes serão Violeta Cobalto.",
+                    "25% (produto de 50% Cobalto x 50% Violeta SF).",
+                    "50% dos filhotes machos apenas.",
+                    "12.5% de toda a postura."
+                ],
+                correct: 1,
+                explanation: "Para o Fator Escuro: 1DF x 0DF = 50% Cobalto (1DF) e 50% Sky (0DF). Para o Fator Violeta: SF x 0 = 50% Violeta SF e 50% Sem Violeta. Multiplicando: 50% x 50% = 25% Violeta Cobalto."
+            },
+            {
+                difficulty: "hard",
+                question: "Qual a consequência do fenótipo 'PallidIno' em machos Ringneck?",
+                options: [
+                    "Expressão intermediária onde o corpo é amarelo/creme suave com olhos vermelhos translúcidos e remiges levemente marcadas.",
+                    "Eliminação total do pigmento cinza, transformando a ave em melânico denso.",
+                    "Morte embrionária antes da eclosão devido ao gene Ino duplo.",
+                    "Desenvolvimento de manchas esmeralda puras nas costas."
+                ],
+                correct: 0,
+                explanation: "A combinação do alelo Pallid com o alelo Ino no macho (Z^pallid Z^ino) cria o alelomorfo 'PallidIno', exibindo fenótipo intermediário entre Pallid e Lutino."
+            },
+            {
+                difficulty: "hard",
+                question: "Se um criador deseja obter 100% de MACHOS PORTADORES DE INO (/split Ino) e 100% de FÊMEAS VISUAIS INO, qual o acasalamento exato?",
+                options: [
+                    "Macho Ino Visual (Z^ino Z^ino) x Fêmea Normal (Z W).",
+                    "Macho Normal (Z Z) x Fêmea Ino Visual (Z^ino W).",
+                    "Macho /split Ino (Z Z^ino) x Fêmea Ino Visual (Z^ino W).",
+                    "Macho Normal /split Azul x Fêmea Albina Visual."
+                ],
+                correct: 0,
+                explanation: "Macho Ino doa Z^ino para 100% dos filhos. As fêmeas recebem W (ficam Ino Visuais). Os machos recebem Z normal da mãe (ficam Verdes /split Ino)."
+            },
+            {
+                difficulty: "hard",
+                question: "O acasalamento entre dois exemplares Heterozigotos para Turquesa e Azul (Turquesa/Azul x Turquesa/Azul) gera qual proporção fenotípica?",
+                options: [
+                    "25% Turquesa Puro, 50% Turquesa/Azul (Parblue), 25% Azul Puro.",
+                    "100% Turquesa Visuais.",
+                    "50% Verde Selvagem e 50% Azul.",
+                    "75% Azul Sky e 25% Turquesa."
+                ],
+                correct: 0,
+                explanation: "Por serem alelos do mesmo locus psitacina, o cruzamento T/bl x T/bl obedece à proporção co-dominante/alelórfica 1 TT : 2 T/bl : 1 bl/bl."
+            }
+        ];
+
+        let activeQuizQuestions = [];
+        let currentQuizDifficulty = 'all';
+        let quizCurrentIndex = 0;
+        let quizScore = 0;
+        let calcTimeout = null;
+
+        function debouncedCalculate() {
+            if (calcTimeout) clearTimeout(calcTimeout);
+            calcTimeout = setTimeout(() => {
+                calculateGenetics();
+            }, 30);
+        }
+
+        /**
+         * Ultra-realistic SVG Generator for Ringneck Parakeet
+         */
+        function generateBirdSVG(birdConfig, prefix = "bird") {
+            const uid = prefix + "_svg";
+
+            // Default Colors (Green Wild-type)
+            let bodyBase = "#16a34a";
+            let bodyLight = "#4ade80";
+            let bodyDark = "#15803d";
+
+            let headBase = "#22c55e";
+            let headLight = "#86efac";
+
+            let mantleBase = "#15803d";
+
+            let wingBase = "#166534";
+            let wingEdge = "#22c55e";
+            let primaryBase = "#0f5132";
+
+            let tailBase = "#0284c7";
+            let tailLight = "#38bdf8";
+
+            let beakUpper = "#dc2626";
+            let beakLower = "#991b1b";
+
+            let eyeIris = "#fef08a";
+            let eyePupil = "#0f172a";
+            let skinColor = "#ea580c";
+
+            let collarBlack = "#0f172a";
+            let collarPink = "#f43f5e";
+            let showCollar = (prefix.includes('male') || birdConfig.sex === 'male');
+
+            const isBlue = birdConfig.blueGene === 'visual' || birdConfig.base === 'blue';
+            const isTurquoise = birdConfig.base === 'turquoise';
+            const isEsmeralda = birdConfig.base === 'esmeralda' || birdConfig.esmeralda === 'visual';
+            const isButtercup = birdConfig.buttercup === 'visual';
+            const dark = birdConfig.dark || 0;
+
+            // COLOR DETERMINATION
+            if (isEsmeralda) {
+                bodyBase = "#059669"; bodyLight = "#34d399"; bodyDark = "#047857";
+                headBase = "#10b981"; headLight = "#6ee7b7";
+                mantleBase = "#047857";
+                wingBase = "#065f46"; wingEdge = "#34d399"; primaryBase = "#022c22";
+                tailBase = "#0f766e"; tailLight = "#2dd4bf";
+            } else if (isBlue) {
+                if (dark === 0) { // Sky Blue
+                    bodyBase = "#0284c7"; bodyLight = "#38bdf8"; bodyDark = "#0369a1";
+                    headBase = "#e0f2fe"; headLight = "#ffffff";
+                    mantleBase = "#0369a1";
+                    wingBase = "#1e40af"; wingEdge = "#38bdf8"; primaryBase = "#172554";
+                    tailBase = "#1d4ed8"; tailLight = "#60a5fa";
+                } else if (dark === 1) { // Cobalt
+                    bodyBase = "#1d4ed8"; bodyLight = "#60a5fa"; bodyDark = "#1e40af";
+                    headBase = "#bae6fd"; headLight = "#f0f9ff";
+                    mantleBase = "#1e40af";
+                    wingBase = "#172554"; wingEdge = "#3b82f6"; primaryBase = "#0f172a";
+                    tailBase = "#1e1b4b"; tailLight = "#3b82f6";
+                } else { // Mauve
+                    bodyBase = "#475569"; bodyLight = "#94a3b8"; bodyDark = "#334155";
+                    headBase = "#cbd5e1"; headLight = "#f1f5f9";
+                    mantleBase = "#334155";
+                    wingBase = "#1e293b"; wingEdge = "#64748b"; primaryBase = "#0f172a";
+                    tailBase = "#0f172a"; tailLight = "#475569";
+                }
+            } else if (isTurquoise) {
+                bodyBase = "#0d9488"; bodyLight = "#2dd4bf"; bodyDark = "#0f766e";
+                headBase = "#fde047"; headLight = "#fef08a";
+                mantleBase = "#0f766e";
+                wingBase = "#134e4a"; wingEdge = "#2dd4bf"; primaryBase = "#042f2e";
+                tailBase = "#0284c7"; tailLight = "#22d3ee";
+            } else { // Green Base
+                if (dark === 1) {
+                    bodyBase = "#15803d"; bodyLight = "#4ade80"; bodyDark = "#166534";
+                    headBase = "#16a34a"; headLight = "#86efac";
+                    mantleBase = "#166534";
+                    wingBase = "#14532d"; wingEdge = "#22c55e"; primaryBase = "#052e16";
+                } else if (dark === 2) {
+                    bodyBase = "#65a30d"; bodyLight = "#a3e635"; bodyDark = "#4d7c0f";
+                    headBase = "#84cc16"; headLight = "#bef264";
+                    mantleBase = "#4d7c0f";
+                    wingBase = "#3f6212"; wingEdge = "#84cc16"; primaryBase = "#1a2e05";
+                }
+            }
+
+            // BUTTERCUP MUTATION VISUAL OVERRIDE
+            if (isButtercup && birdConfig.ino !== 'visual') {
+                headBase = "#fde047";
+                headLight = "#fef08a";
+                bodyLight = "#fef08a";
+                wingEdge = "#fde047";
+                tailLight = "#fef08a";
+            }
+
+            // VIOLET & GREY DOMINANTS
+            if (birdConfig.violet > 0 && isBlue) {
+                bodyBase = "#6d28d9"; bodyLight = "#a855f7"; bodyDark = "#4c1d95";
+                mantleBase = "#5b21b6"; wingBase = "#3b0764"; primaryBase = "#2e1065";
+                tailBase = "#4c1d95"; tailLight = "#c084fc";
+            }
+            if (birdConfig.grey > 0) {
+                bodyBase = "#64748b"; bodyLight = "#cbd5e1"; bodyDark = "#334155";
+                mantleBase = "#475569"; wingBase = "#1e293b"; primaryBase = "#0f172a";
+                tailBase = "#334155"; tailLight = "#94a3b8";
+            }
+
+            // CANELA
+            if (birdConfig.cinnamon === 'visual' && birdConfig.ino !== 'visual') {
+                primaryBase = "#78350f"; wingBase = "#92400e"; wingEdge = "#f59e0b";
+                collarBlack = "#78350f";
+            }
+
+            // OPALINO
+            const isOpaline = (birdConfig.opaline === 'visual');
+            if (isOpaline && birdConfig.ino !== 'visual') {
+                mantleBase = bodyBase;
+                wingEdge = isBlue ? "#7dd3fc" : "#fde047";
+            }
+
+            // CLEARTAIL
+            if (birdConfig.cleartail === 'visual' && birdConfig.ino !== 'visual') {
+                tailBase = "#fef08a"; tailLight = "#ffffff";
+                if (isBlue) { headBase = "#fde047"; headLight = "#fef08a"; }
+            }
+
+            // INO OVERRIDE
+            if (birdConfig.ino === 'visual') {
+                if (isBlue) {
+                    bodyBase = "#ffffff"; bodyLight = "#ffffff"; bodyDark = "#f1f5f9";
+                    headBase = "#ffffff"; headLight = "#ffffff";
+                    mantleBase = "#f8fafc";
+                    wingBase = "#f1f5f9"; wingEdge = "#ffffff"; primaryBase = "#e2e8f0";
+                    tailBase = "#ffffff"; tailLight = "#f8fafc";
+                    beakUpper = "#fca5a5"; beakLower = "#f87171"; showCollar = false;
+                } else {
+                    bodyBase = "#eab308"; bodyLight = "#fde047"; bodyDark = "#ca8a04";
+                    headBase = "#fde047"; headLight = "#fef08a";
+                    mantleBase = "#facc15";
+                    wingBase = "#eab308"; wingEdge = "#fef08a"; primaryBase = "#fef08a";
+                    tailBase = "#fef08a"; tailLight = "#ffffff";
+                }
+                eyeIris = "#fca5a5"; eyePupil = "#dc2626";
+            }
+
+            return `
+            <svg viewBox="0 0 160 160" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="${uid}_body" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="${bodyLight}"/>
+                        <stop offset="60%" stop-color="${bodyBase}"/>
+                        <stop offset="100%" stop-color="${bodyDark}"/>
+                    </linearGradient>
+                    <linearGradient id="${uid}_head" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="${headLight}"/>
+                        <stop offset="80%" stop-color="${headBase}"/>
+                    </linearGradient>
+                    <linearGradient id="${uid}_wing" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="${wingEdge}"/>
+                        <stop offset="70%" stop-color="${wingBase}"/>
+                        <stop offset="100%" stop-color="${primaryBase}"/>
+                    </linearGradient>
+                    <linearGradient id="${uid}_tail" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="${tailLight}"/>
+                        <stop offset="100%" stop-color="${tailBase}"/>
+                    </linearGradient>
+                </defs>
+
+                <g>
+                    <!-- PERCH -->
+                    <path d="M 10 134 C 50 130 110 130 150 134" stroke="#78350f" stroke-width="5" stroke-linecap="round" fill="none"/>
+
+                    <!-- TAIL FEATHERS -->
+                    <path d="M 68 88 L 22 154 C 20 157 25 158 28 154 L 75 92 Z" fill="url(#${uid}_tail)"/>
+                    <path d="M 72 89 L 34 152 C 32 155 36 156 38 153 L 78 94 Z" fill="${tailBase}" opacity="0.8"/>
+
+                    <!-- BODY & CHEST -->
+                    <path d="M 58 48 C 50 62 52 92 68 116 C 80 118 96 102 94 76 C 92 58 82 46 70 42 Z" fill="url(#${uid}_body)"/>
+
+                    <!-- BACK MANTLE -->
+                    <path d="M 62 46 C 58 54 59 75 66 90 C 72 92 78 82 76 68 C 74 54 70 46 62 46 Z" fill="${mantleBase}"/>
+
+                    <!-- WINGS -->
+                    <path d="M 62 52 C 55 68 62 98 84 108 C 90 98 94 80 88 62 C 82 52 70 50 62 52 Z" fill="url(#${uid}_wing)"/>
+                    <path d="M 66 60 Q 72 65 78 61" stroke="${wingEdge}" stroke-width="1.8" fill="none" opacity="0.8"/>
+                    <path d="M 68 68 Q 75 74 82 69" stroke="${wingEdge}" stroke-width="1.8" fill="none" opacity="0.8"/>
+
+                    ${isOpaline ? `<path d="M 60 48 Q 66 58 72 50" stroke="${headLight}" stroke-width="2" fill="none"/>` : ''}
+
+                    <!-- FEET -->
+                    <path d="M 66 122 L 64 130 M 71 123 L 71 131" stroke="${skinColor}" stroke-width="2.5" stroke-linecap="round"/>
+
+                    <!-- RINGNECK COLLAR -->
+                    ${showCollar ? `<path d="M 62 44 C 66 50 80 50 85 43" stroke="${collarBlack}" stroke-width="3" fill="none"/>
+                    <path d="M 63 46 C 67 51 79 51 84 45" stroke="${collarPink}" stroke-width="1.5" fill="none"/>` : ''}
+
+                    <!-- HEAD & CROWN -->
+                    <path d="M 58 44 C 54 28 68 18 84 22 C 96 26 98 38 92 48 C 80 52 64 50 58 44 Z" fill="url(#${uid}_head)"/>
+
+                    <!-- EYE -->
+                    <circle cx="78" cy="30" r="5" fill="#ffffff"/>
+                    <circle cx="78" cy="30" r="4" fill="${eyeIris}"/>
+                    <circle cx="78" cy="30" r="2.2" fill="${eyePupil}"/>
+                    <circle cx="79" cy="29" r="0.8" fill="#ffffff"/>
+
+                    <!-- BEAK -->
+                    <path d="M 90 28 C 104 30 110 40 102 48 C 98 51 94 46 92 42 Q 90 35 90 28 Z" fill="${beakUpper}"/>
+                    <path d="M 92 41 Q 97 43 93 48 C 91 47 89 44 92 41 Z" fill="${beakLower}"/>
+                </g>
+            </svg>
+            `;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderGalleryCards();
+            calculateGenetics();
+        });
+
+        function switchTab(tabId) {
+            ['calculator', 'gallery', 'quiz'].forEach(id => {
+                const sec = document.getElementById(`tab-${id}`);
+                const navBtn = document.getElementById(`nav-${id}`);
+                if (id === tabId) {
+                    sec.classList.remove('hidden');
+                    navBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-forest-600 text-white shadow-md shadow-forest-900/50 flex items-center justify-center gap-2";
+                } else {
+                    sec.classList.add('hidden');
+                    navBtn.className = "flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-stone-300 hover:text-white hover:bg-forest-800/50 flex items-center justify-center gap-2";
+                }
+            });
+        }
+
+        function toggleGlossaryModal(show) {
+            const modal = document.getElementById('glossary-modal');
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        function renderGalleryCards() {
+            const container = document.getElementById('gallery-grid');
+            container.innerHTML = '';
+
+            Object.values(MUTATION_DATA).forEach(m => {
+                const card = document.createElement('div');
+                card.className = "glass-panel rounded-3xl p-5 border border-stone-200 shadow-2xs space-y-3 hover:border-forest-500/40 transition-all";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-stone-100 text-forest-900 border border-stone-200">
+                            ${m.categoryName}
+                        </span>
+                        <div class="w-3.5 h-3.5 rounded-full bg-gradient-to-r ${m.bgGradient}"></div>
+                    </div>
+                    <h3 class="font-black text-stone-900 text-base">${m.name}</h3>
+                    <p class="text-xs text-stone-600 leading-relaxed font-medium">${m.description}</p>
+                    <div class="pt-2 border-t border-stone-200">
+                        <span class="text-[11px] font-bold text-forest-800 block mb-0.5"><i class="fa-solid fa-eye mr-1 text-forest-600"></i> Dica Visual:</span>
+                        <p class="text-[11px] text-stone-500 italic font-medium">${m.visualTip}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function calculateGenetics() {
+            const male = {
+                sex: 'male',
+                base: document.getElementById('male-base').value,
+                dark: parseInt(document.getElementById('male-dark').value),
+                blueGene: document.getElementById('male-blue-gene').value,
+                buttercup: document.getElementById('male-buttercup').value,
+                cleartail: document.getElementById('male-cleartail').value,
+                fallow: document.getElementById('male-fallow').value,
+                esmeralda: document.getElementById('male-esmeralda').value,
+                ino: document.getElementById('male-ino').value,
+                opaline: document.getElementById('male-opaline').value,
+                cinnamon: document.getElementById('male-cinnamon').value,
+                pallid: document.getElementById('male-pallid').value,
+                violet: parseInt(document.getElementById('male-violet').value),
+                grey: parseInt(document.getElementById('male-grey').value)
+            };
+
+            const female = {
+                sex: 'female',
+                base: document.getElementById('female-base').value,
+                dark: parseInt(document.getElementById('female-dark').value),
+                blueGene: document.getElementById('female-blue-gene').value,
+                buttercup: document.getElementById('female-buttercup').value,
+                cleartail: document.getElementById('female-cleartail').value,
+                fallow: document.getElementById('female-fallow').value,
+                esmeralda: document.getElementById('female-esmeralda').value,
+                ino: document.getElementById('female-ino').value,
+                opaline: document.getElementById('female-opaline').value,
+                cinnamon: document.getElementById('female-cinnamon').value,
+                pallid: document.getElementById('female-pallid').value,
+                violet: parseInt(document.getElementById('female-violet').value),
+                grey: parseInt(document.getElementById('female-grey').value)
+            };
+
+            document.getElementById('male-svg-container').innerHTML = generateBirdSVG(male, 'male');
+            document.getElementById('female-svg-container').innerHTML = generateBirdSVG(female, 'female');
+
+            const maleResults = calculateOffspring(male, female, 'male');
+            const femaleResults = calculateOffspring(male, female, 'female');
+
+            const sampleChickConfig = getSampleChickConfig(male, female);
+            document.getElementById('chick-svg-container').innerHTML = generateBirdSVG(sampleChickConfig.config, 'chick');
+            document.getElementById('chick-summary-text').innerText = sampleChickConfig.phenotypeName;
+
+            document.getElementById('male-summary-text').innerText = getPhenotypeName(male, 'male');
+            document.getElementById('female-summary-text').innerText = getPhenotypeName(female, 'female');
+
+            renderResultsList('male-results-list', maleResults, 'sky');
+            renderResultsList('female-results-list', femaleResults, 'rose');
+        }
+
+        function getPhenotypeName(b, sex) {
+            let names = [];
+            if (b.ino === 'visual') {
+                if (b.base === 'blue' || b.blueGene === 'visual') return 'Albino Visual';
+                return 'Lutino Visual';
+            }
+
+            if (b.base === 'esmeralda' || b.esmeralda === 'visual') names.push('Esmeralda');
+            else if (b.base === 'blue' || b.blueGene === 'visual') names.push('Azul');
+            else if (b.base === 'turquoise') names.push('Turquesa');
+            else names.push('Verde');
+
+            if (b.buttercup === 'visual') names.push('Buttercup');
+            if (b.opaline === 'visual') names.push('Opalino');
+            if (b.cleartail === 'visual') names.push('Cleartail');
+            if (b.cinnamon === 'visual') names.push('Canela');
+
+            let splits = [];
+            if (b.esmeralda === 'split' && b.esmeralda !== 'visual') splits.push('Esmeralda');
+            if (b.buttercup === 'split' && b.buttercup !== 'visual') splits.push('Buttercup');
+            if (b.blueGene === 'split') splits.push('Azul');
+            if (sex === 'male') {
+                if (b.ino === 'split') splits.push('Ino');
+                if (b.opaline === 'split') splits.push('Opalino');
+            }
+
+            let result = names.join(' ');
+            if (splits.length > 0) result += ` /split ${splits.join(', ')}`;
+            return result || 'Verde Normal';
+        }
+
+        function calculateOffspring(male, female, sex) {
+            let list = [];
+            let isEsmeralda = male.esmeralda === 'visual' || female.esmeralda === 'visual';
+            let isButtercup = male.buttercup === 'visual' || female.buttercup === 'visual';
+
+            let base = "Verde";
+            if (isEsmeralda) base = "Esmeralda Visual";
+            else if (male.blueGene === 'visual' && female.blueGene === 'visual') base = "Azul Visual";
+            else if (male.blueGene === 'split' || female.blueGene === 'split') base = "Verde (/split Azul)";
+
+            if (isButtercup) base += " + Buttercup";
+
+            if (sex === 'female') {
+                if (male.opaline === 'visual') base += " Opalina Visual";
+                if (male.ino === 'visual') base += " Ino Visual";
+            } else {
+                if (male.opaline === 'visual' || female.opaline === 'visual') base += " (/split Opalino)";
+                if (male.ino === 'visual' || female.ino === 'visual') base += " (/split Ino)";
+            }
+
+            list.push(`50% ${base}`);
+            list.push(`50% ${base} Normal`);
+            return list;
+        }
+
+        function getSampleChickConfig(male, female) {
+            let config = {
+                sex: 'male',
+                base: male.base,
+                dark: Math.min(2, Math.round((male.dark + female.dark) / 2)),
+                blueGene: male.blueGene,
+                buttercup: male.buttercup === 'visual' ? 'visual' : 'normal',
+                esmeralda: male.esmeralda === 'visual' ? 'visual' : 'normal',
+                cleartail: male.cleartail === 'visual' ? 'visual' : 'normal',
+                opaline: male.opaline === 'visual' ? 'visual' : 'normal',
+                cinnamon: male.cinnamon === 'visual' ? 'visual' : 'normal'
+            };
+            return { config, phenotypeName: getPhenotypeName(config, 'male') };
+        }
+
+        function renderResultsList(containerId, results, themeColor) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            results.forEach(res => {
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-2xl bg-white border border-${themeColor}-200 text-xs font-bold text-stone-800 flex items-center gap-2.5 shadow-2xs`;
+                item.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-${themeColor}-500 flex-shrink-0"></span><span>${res}</span>`;
+                container.appendChild(item);
+            });
+        }
+
+        /**
+         * Funções de amostragem e sorteio de questões dinâmicas
+         */
+        function setQuizDifficultyAndStart(diff) {
+            currentQuizDifficulty = diff;
+            let questionsPool = [];
+
+            if (diff === 'all') {
+                // Seleciona 10 questões aleatórias mesclando dificuldades
+                const easyPool = MASTER_QUIZ_POOL.filter(q => q.difficulty === 'easy').sort(() => Math.random() - 0.5);
+                const medPool = MASTER_QUIZ_POOL.filter(q => q.difficulty === 'medium').sort(() => Math.random() - 0.5);
+                const hardPool = MASTER_QUIZ_POOL.filter(q => q.difficulty === 'hard').sort(() => Math.random() - 0.5);
+                
+                questionsPool = [
+                    ...easyPool.slice(0, 3),
+                    ...medPool.slice(0, 4),
+                    ...hardPool.slice(0, 3)
+                ];
+            } else {
+                // Seleciona 6 questões aleatórias da dificuldade escolhida
+                const filtered = MASTER_QUIZ_POOL.filter(q => q.difficulty === diff);
+                const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+                questionsPool = shuffled.slice(0, 6);
+            }
+
+            // Clonar e embaralhar as alternativas de cada pergunta selecionada
+            activeQuizQuestions = questionsPool.map(q => cloneAndShuffleQuestion(q));
+            // Embaralha a ordem final das perguntas no teste
+            activeQuizQuestions.sort(() => Math.random() - 0.5);
+
+            quizCurrentIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-start-screen').classList.add('hidden');
+            document.getElementById('quiz-question-screen').classList.remove('hidden');
+            loadQuizQuestion();
+        }
+
+        /**
+         * Clona a pergunta e embaralha dinamicamente as opções para diversificar os índices das respostas a cada jogo
+         */
+        function cloneAndShuffleQuestion(q) {
+            const optionsWithIndex = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.correct }));
+            // Embaralha as alternativas
+            optionsWithIndex.sort(() => Math.random() - 0.5);
+            
+            const newOptions = optionsWithIndex.map(o => o.text);
+            const newCorrectIndex = optionsWithIndex.findIndex(o => o.isCorrect);
+
+            return {
+                difficulty: q.difficulty,
+                question: q.question,
+                options: newOptions,
+                correct: newCorrectIndex,
+                explanation: q.explanation
+            };
+        }
+
+        function getDifficultyBadge(diff) {
+            if (diff === 'easy') return '<span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-forest-100 text-forest-900 border border-forest-200">Fácil</span>';
+            if (diff === 'medium') return '<span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">Médio</span>';
+            return '<span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-900 border border-rose-200">Difícil</span>';
+        }
+
+        function loadQuizQuestion() {
+            const q = activeQuizQuestions[quizCurrentIndex];
+            document.getElementById('quiz-progress-indicator').innerHTML = `Questão ${quizCurrentIndex + 1} de ${activeQuizQuestions.length} ${getDifficultyBadge(q.difficulty)}`;
+            document.getElementById('quiz-score-indicator').innerHTML = `<i class="fa-solid fa-star mr-1"></i> Pontos: ${quizScore}`;
+            document.getElementById('quiz-question-text').innerText = q.question;
+
+            const container = document.getElementById('quiz-answers-container');
+            container.innerHTML = '';
+            document.getElementById('quiz-feedback-box').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-2xl border border-stone-200 bg-white hover:bg-forest-50/60 hover:border-forest-300 text-xs sm:text-sm font-semibold text-stone-800 transition-all flex items-center justify-between shadow-2xs group";
+                btn.innerHTML = `<span><strong class="text-forest-700 mr-2 group-hover:text-forest-800 font-extrabold">${String.fromCharCode(65 + idx)}.</strong> ${opt}</span>`;
+                btn.onclick = () => submitQuizAnswer(idx);
+                container.appendChild(btn);
+            });
+        }
+
+        function submitQuizAnswer(selectedIndex) {
+            const q = activeQuizQuestions[quizCurrentIndex];
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            feedbackBox.classList.remove('hidden');
+
+            // Desabilitar botões após a resposta
+            const buttons = document.querySelectorAll('#quiz-answers-container button');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.correct) {
+                    btn.classList.remove('border-stone-200', 'bg-white');
+                    btn.classList.add('border-forest-500', 'bg-forest-50', 'text-forest-950', 'font-bold');
+                } else if (idx === selectedIndex && selectedIndex !== q.correct) {
+                    btn.classList.remove('border-stone-200', 'bg-white');
+                    btn.classList.add('border-rose-400', 'bg-rose-50', 'text-rose-950');
+                }
+            });
+
+            if (selectedIndex === q.correct) {
+                const points = q.difficulty === 'hard' ? 150 : (q.difficulty === 'medium' ? 100 : 50);
+                quizScore += points;
+                feedbackBox.className = "p-4 rounded-2xl border bg-forest-50 border-forest-200 text-forest-950 text-xs leading-relaxed space-y-1 shadow-2xs";
+                feedbackBox.innerHTML = `<h4 class="font-black text-sm flex items-center gap-1.5 text-forest-800"><i class="fa-solid fa-circle-check text-forest-600"></i> Correto! (+${points} pontos)</h4><p class="font-medium text-forest-900">${q.explanation}</p>`;
+            } else {
+                feedbackBox.className = "p-4 rounded-2xl border bg-rose-50 border-rose-200 text-rose-950 text-xs leading-relaxed space-y-1 shadow-2xs";
+                feedbackBox.innerHTML = `<h4 class="font-black text-sm flex items-center gap-1.5 text-rose-800"><i class="fa-solid fa-circle-xmark text-rose-600"></i> Incorreto</h4><p class="font-medium text-rose-900">${q.explanation}</p>`;
+            }
+
+            document.getElementById('quiz-score-indicator').innerHTML = `<i class="fa-solid fa-star mr-1 text-amber-500"></i> Pontos: ${quizScore}`;
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            quizCurrentIndex++;
+            if (quizCurrentIndex < activeQuizQuestions.length) {
+                loadQuizQuestion();
+            } else {
+                document.getElementById('quiz-question-screen').classList.add('hidden');
+                document.getElementById('quiz-finished-screen').classList.remove('hidden');
+                document.getElementById('quiz-final-score-text').innerText = `Você obteve ${quizScore} pontos!`;
+            }
+        }
+
+        function restartQuiz() {
+            document.getElementById('quiz-finished-screen').classList.add('hidden');
+            document.getElementById('quiz-start-screen').classList.remove('hidden');
+        }
+    </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js');
+    });
+  }
+</script>
+</body>
+</html>
